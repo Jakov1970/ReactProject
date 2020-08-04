@@ -3,17 +3,35 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { createStore, applyMiddleware } from 'redux'; //applyMiddleware saljemo kao drugi parametar createStore-u
+import { createStore, applyMiddleware, compose } from 'redux'; //applyMiddleware saljemo kao drugi parametar createStore-u
 import rootReducer from './store/reducers/rootReducer';
 import { Provider } from 'react-redux' //za bind-ovanje redux-a u react aplikaciju
 import thunk from 'redux-thunk'
+import {getFirestore, reduxFirestore, createFirestoreInstance} from 'redux-firestore'
+import {getFirebase, ReactReduxFirebaseProvider} from 'react-redux-firebase'
+import fbConfig from './config/fbConfig'
+import firebase from 'firebase/app'
 
-const store = createStore(rootReducer, applyMiddleware(thunk));
+const store = createStore(rootReducer,
+  compose(
+    applyMiddleware(thunk.withExtraArgument({ getFirebase, getFirestore })),
+    reduxFirestore(firebase, fbConfig)
+  )
+);
+
+const rrfProps = {
+  firebase,
+  config: fbConfig,
+  dispatch: store.dispatch,
+  createFirestoreInstance
+}
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <ReactReduxFirebaseProvider {...rrfProps}>
+        <App />
+      </ReactReduxFirebaseProvider>
     </Provider>  
   </React.StrictMode>,
   document.getElementById('root')
