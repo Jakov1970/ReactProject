@@ -5,7 +5,7 @@ import { compose } from 'redux'
 
 const ProjectDetails = (props) => {
     //const id = props.match.params.id;    Ova linija koda uzima iz URL-a ID projekta koji je u path-u. Na primer: ".../project/1". ID ce biti 1. Ova linja samo "cupa" tu jedinicu na kraju
-    const { project } = props
+    const { project } = props;
     if(project){
         return (
         <div className="container section project-details">
@@ -35,7 +35,7 @@ const mapStateToProps = (state, ownProps) => {              //ownProps je ustvar
     //console.log(state);
     const id = ownProps.match.params.id;
     const projects = state.firestore.data.projects;
-    const project = project ? projects[id] : null                 //koristimo konstante projects i id kako bismo 
+    const project = projects ? projects[id] : null                 //koristimo konstante projects i id kako bismo 
     return {
         project: project                                    //to je const project od iznad
     }
