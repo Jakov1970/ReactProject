@@ -35,7 +35,7 @@ const mapStateToProps = (state, ownProps) => {              //ownProps je ustvar
     //console.log(state);
     const id = ownProps.match.params.id;
     const projects = state.firestore.data.projects;
-    const project = projects ? projects[id] : null                 //koristimo konstante projects i id kako bismo 
+    const project = projects ? projects[id] : null                 //koristimo konstante projects i id kako bismo izvukli odredjeni projekat iz baze
     return {
         project: project                                    //to je const project od iznad
     }
