@@ -5,10 +5,10 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { createStore, applyMiddleware, compose } from 'redux'; //applyMiddleware saljemo kao drugi parametar createStore-u
 import rootReducer from './store/reducers/rootReducer';
-import { Provider } from 'react-redux' //za bind-ovanje redux-a u react aplikaciju
+import { Provider, useSelector } from 'react-redux' //za bind-ovanje redux-a u react aplikaciju
 import thunk from 'redux-thunk'
 import {getFirestore, reduxFirestore, createFirestoreInstance} from 'redux-firestore'
-import {getFirebase, ReactReduxFirebaseProvider} from 'react-redux-firebase'
+import {getFirebase, ReactReduxFirebaseProvider, isLoaded} from 'react-redux-firebase'
 import fbConfig from './config/fbConfig'
 import firebase from 'firebase/app'
 
@@ -19,18 +19,32 @@ const store = createStore(rootReducer,
   )
 );
 
+const profileSpecificProps = {
+  userProfile: 'users',
+  useFirestoreForProfile: true 
+}
+
 const rrfProps = {
   firebase,
-  config: fbConfig,
+  config: profileSpecificProps,
+  //config: profileSpecificProps,
   dispatch: store.dispatch,
   createFirestoreInstance
+}
+
+function AuthIsLoaded({ children }) {
+  const auth = useSelector(state => state.firebase.auth)
+  if (!isLoaded(auth)) return <div className="center"> <p>Loading projects...</p></div>;
+      return children
 }
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ReactReduxFirebaseProvider {...rrfProps}>
-        <App />
+      <ReactReduxFirebaseProvider {...rrfProps }>
+        <AuthIsLoaded>
+          <App />
+        </AuthIsLoaded>
       </ReactReduxFirebaseProvider>
     </Provider>  
   </React.StrictMode>,
