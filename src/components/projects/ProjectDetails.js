@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { firestoreConnect } from 'react-redux-firebase'
 import { compose } from 'redux'
 import { Redirect } from 'react-router-dom'
+import moment from 'moment'
 
 const ProjectDetails = (props) => {
     //const id = props.match.params.id;    Ova linija koda uzima iz URL-a ID projekta koji je u path-u. Na primer: ".../project/1". ID ce biti 1. Ova linja samo "cupa" tu jedinicu na kraju
@@ -19,7 +20,7 @@ const ProjectDetails = (props) => {
                 </div>         
                 <div className="card-action grey lighten-4 grey text">
                     <div>Posted by {project.authorFirstName} {project.authorLastName}</div>
-                    <div>3rd August, 2am</div>
+                    <div>{moment(project.createdAt.toDate()).calendar()}</div>
                 </div>   
             </div>
         </div>

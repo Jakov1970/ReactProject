@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'//da ne bude u zagradi. Izbacuje gresku da objekat nije f-ja
 
 const ProjectSummary = ({project}) => {
     return(
@@ -6,7 +7,7 @@ const ProjectSummary = ({project}) => {
             <div className="card-content grey-text text-darken-3">
                 <span className="card-title">{project.title}</span>
                 <p>Posted by {project.authorFirstName} {project.authorLastName}</p>
-                <p className="grey-text">3rd August, 2am</p>
+                <p className="grey-text"> { moment(project.createdAt.toDate()).calendar() } </p>
             </div>            
         </div>  
     )
